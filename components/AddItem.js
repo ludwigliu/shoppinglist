@@ -18,12 +18,11 @@ const AddItem = ({addItem}) => {
         style={styles.input}
         onChangeText={text => setText(text)}
         onSubmitEditing={() => {
-            addItem(text);
-            //setText('');
+          addItem(text);
+          //setText('');
         }}
-        value={text} 
+        value={text}
       />
-
     </View>
   );
 };
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
     height: 60,
     padding: 8,
     fontSize: 16,
-    backgroundColor: '#D8D7D7'
+    backgroundColor: '#D8D7D7',
   },
   btn: {
     backgroundColor: '#F6F3F2',
