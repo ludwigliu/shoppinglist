@@ -83,6 +83,7 @@ class ShoppingList extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 30
   },
   emtyText: {
     fontSize: 20,

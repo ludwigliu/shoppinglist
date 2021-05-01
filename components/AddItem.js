@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import FontAwesome5Pro from 'react-native-vector-icons/FontAwesome5Pro';
+//import FontAwesome5Pro from 'react-native-vector-icons/FontAwesome5Pro';
 
 const AddItem = ({addItem}) => {
   const [text, setText] = useState('');
