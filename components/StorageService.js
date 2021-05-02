@@ -15,7 +15,7 @@ export async function getAllItems() {
       id: '10000',
     })
     .then(data => {
-      return data;
+      return data ? data : [];
     })
     .catch(err => {
       console.log('error: ', err);

@@ -10,6 +10,7 @@ import About from './components/About';
 import uuidv4 from 'uuidv4';
 
 function filterItems(id, items) {
+  if(items.filter === undefined) return [];
   let filteredItems = items.filter(item => item.id !== id);
   removeItem(filteredItems);
   return filteredItems;
@@ -21,7 +22,8 @@ const itemTemplate = {
   description: '',
 };
 
-function appendItem(item, items) {
+function appendItem(item, items, prevItem) {
+  items = filterItems(prevItem.id, items);
   addItem({...items, item: item});
   return [...items, item];
 }
@@ -66,7 +68,7 @@ class ShoppingList extends React.Component {
     console.log('current before saved: ', this.state.items);
     console.log('save item ', item);
     this.setState({
-      items: appendItem(item, this.state.items),
+      items: appendItem(item, this.state.items, this.state.selectedItem),
     });
   };
 
