@@ -1,17 +1,13 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import React from 'react';
+import {View, StyleSheet, FlatList} from 'react-native';
 import {getAllItems, addItem, removeItem} from './components/StorageService';
 
 import Header from './components/Header';
-import ListItem from './components/ListItem';
-import AddItem from './components/AddItem';
+import ListItem from './components/item/ListItem';
+import FloatingButton from './components/FloatingButton';
+import ItemDetails from './components/item/ItemDetails';
+import About from './components/About';
 import uuidv4 from 'uuidv4';
-
-const initialItems = [
-  {id: uuidv4(), text: 'Milk'},
-  {id: uuidv4(), text: 'Broad'},
-  {id: uuidv4(), text: 'Egg'},
-];
 
 function filterItems(id, items) {
   let filteredItems = items.filter(item => item.id !== id);
@@ -19,27 +15,29 @@ function filterItems(id, items) {
   return filteredItems;
 }
 
-function appendItem(text, items) {
-  addItem([...items, {id: uuidv4(), text: text}]);
+const itemTemplate = {
+  text: '',
+  id: '',
+  description: '',
+};
 
-  return [
-    ...items,
-    {
-      id: uuidv4(),
-      text: text,
-    },
-  ];
+function appendItem(item, items) {
+  addItem({...items, item: item});
+  return [...items, item];
 }
 
 class ShoppingList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: '',
+      items: [],
+      modalVisible: false,
+      selectedItem: '',
+      aboutVisible: false,
     };
   }
 
-  UNSAFE_componentWillMount() {
+  componentDidMount() {
     let data = getAllItems().then(data => {
       this.setState({
         items: data,
@@ -48,33 +46,86 @@ class ShoppingList extends React.Component {
     console.log('data ', data);
   }
 
-  addItem = text => {
+  // click on floating button to add item
+  onPressFloatingButton = () => {
     this.setState({
-      items: appendItem(text, this.state.items),
+      modalVisible: true,
+      selectedItem: itemTemplate,
     });
   };
 
-  deleteItem = id => {
-    console.log('item id: ', id);
+  handleCompleteItem = id => {
+    console.log('complete item: ', id);
     this.setState({
       items: filterItems(id, this.state.items),
     });
   };
 
+  handleSaveItem = item => {
+    item.id = uuidv4();
+    console.log('current before saved: ', this.state.items);
+    console.log('save item ', item);
+    this.setState({
+      items: appendItem(item, this.state.items),
+    });
+  };
+
+  handleSelectItem = item => {
+    console.log('selected item: ', item);
+    this.setState({
+      modalVisible: true,
+      selectedItem: item,
+    });
+  };
+
+  handleDismiss = () => {
+    console.log('dismiss modal');
+    this.setState({
+      modalVisible: false,
+    });
+  };
+
+  showAbout = visible => {
+    this.setState({
+      aboutVisible: visible,
+    });
+  };
+
   render() {
     const renderItem = ({item}) => (
-      <ListItem item={item} deleteItem={this.deleteItem} />
+      <ListItem
+        item={item}
+        onComplete={this.handleCompleteItem}
+        onSelect={this.handleSelectItem}
+      />
     );
 
     return (
       <View style={styles.container}>
-        <Header title="Shopping List" />
-        <AddItem addItem={this.addItem} />
+        <View style={styles.header}>
+          <Header title="Shopping List" showAbout={this.showAbout} />
+        </View>
+
         <FlatList
+          style={styles.list}
           data={this.state.items}
-          //keyExtractor={item => item.id}
           renderItem={renderItem}
         />
+        {this.state.modalVisible && (
+          <ItemDetails
+            item={this.state.selectedItem}
+            modalVisible={this.state.modalVisible}
+            onDismiss={this.handleDismiss}
+            onSave={this.handleSaveItem}
+          />
+        )}
+        {this.state.aboutVisible && (
+          <About
+            visible={this.state.aboutVisible}
+            setVisible={this.showAbout}
+          />
+        )}
+        <FloatingButton onPress={this.onPressFloatingButton} />
       </View>
     );
   }
@@ -83,13 +134,14 @@ class ShoppingList extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30
+    paddingTop: 10,
   },
-  emtyText: {
-    fontSize: 20,
-    color: '#D8D7D7',
-    textAlign: 'center',
-    paddingTop: 40,
+  header: {
+    height: 40,
+  },
+  list: {
+    paddingLeft: 4,
+    paddingRight: 4,
   },
 });
 

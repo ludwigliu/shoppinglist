@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
   listItemText: {
     fontSize: 18,
   },
+  listItemDesc: {
+    fontSize: 8,
+  },
   iconStyle: {
     backgroundColor: '#D7D5D5',
   },

@@ -1,7 +1,12 @@
-import uuidv4 from 'uuidv4';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Rnstorage from './Rnstorage';
+import uuidv4 from 'uuidv4';
 
 const storage = global.storage;
+
+const initialItems = [
+  {id: uuidv4(), text: 'Sample', description: 'a sample item'},
+];
 
 export async function getAllItems() {
   return await storage
@@ -11,9 +16,10 @@ export async function getAllItems() {
     })
     .then(data => {
       return data;
-    }).catch(err => {
+    })
+    .catch(err => {
       console.log('error: ', err);
-      return [];
+      return initialItems;
     });
 }
 
