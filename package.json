@@ -1,6 +1,6 @@
 {
   "name": "shoppinglist",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -11,7 +11,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.15.4",
+    "@react-native-community/async-storage": "^1.12.1",
     "react": "17.0.1",
     "react-native": "0.64.0",
     "react-native-paper": "^4.8.1",

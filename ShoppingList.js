@@ -24,7 +24,7 @@ const itemTemplate = {
 
 function appendItem(item, items, prevItem) {
   items = filterItems(prevItem.id, items);
-  addItem({...items, item: item});
+  addItem([...items, item]);
   return [...items, item];
 }
 
@@ -40,12 +40,11 @@ class ShoppingList extends React.Component {
   }
 
   componentDidMount() {
-    let data = getAllItems().then(data => {
+    getAllItems().then(data => {
       this.setState({
         items: data,
       });
     });
-    console.log('data ', data);
   }
 
   // click on floating button to add item
@@ -65,10 +64,8 @@ class ShoppingList extends React.Component {
 
   handleSaveItem = item => {
     item.id = uuidv4();
-    console.log('current before saved: ', this.state.items);
-    console.log('save item ', item);
     this.setState({
-      items: appendItem(item, this.state.items, this.state.selectedItem),
+      items: appendItem({...item}, this.state.items, this.state.selectedItem),
     });
   };
 
